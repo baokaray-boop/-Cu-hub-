@@ -1,0 +1,115 @@
+--[[
+    Project: 🍋Cu hub🍋 - Steal An Egg
+    Designed for Roblox Exploits & Admin Controls
+]]
+
+local success, Rayfield = pcall(function()
+    return loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+end)
+
+if not success or not Rayfield then
+    warn("[🍋Cu hub🍋] Không thể tải Rayfield UI Library!")
+    return
+end
+
+local Window = Rayfield:CreateWindow({
+    Name = "🍋Cu hub🍋 | Steal An Egg",
+    LoadingTitle = "Đang khởi động Cu hub...",
+    LoadingSubtitle = "by Ryuun0x",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "CuHubConfigs",
+        FileName = "StealAnEgg_Config"
+    },
+    KeySystem = false,
+    Theme = {
+        TextColor = Color3.fromRGB(255, 255, 255),
+        Background = Color3.fromRGB(18, 18, 18),
+        Topbar = Color3.fromRGB(28, 28, 28),
+        Accent = Color3.fromRGB(255, 215, 0), -- Viền vàng rực rỡ
+        SecondaryAccent = Color3.fromRGB(230, 180, 0),
+        Border = Color3.fromRGB(255, 215, 0)
+    }
+})
+
+local HomeTab = Window:CreateTab("Trang Chủ", 4483362458)
+HomeTab:CreateSection("Thông Tin Phiên Bản")
+HomeTab:CreateLabel("Tên Hub: 🍋Cu hub🍋")
+HomeTab:CreateLabel("Tựa game: Steal An Egg")
+HomeTab:CreateLabel("Trạng thái: Đã kết nối thành công ✅")
+
+HomeTab:CreateSection("Hệ Thống Nhanh")
+HomeTab:CreateButton({
+    Name = "Thông báo Chào mừng",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "🍋Cu hub🍋",
+            Content = "Chào mừng bạn đến với phiên bản Cu hub viền vàng!",
+            Duration = 4.5,
+            Image = 4483362458,
+        })
+    end,
+})
+
+local FarmTab = Window:CreateTab("Tính Năng Game", 4483362458)
+FarmTab:CreateSection("Tự Động Hóa (Auto)")
+
+local autoEggRunning = false
+FarmTab:CreateToggle({
+    Name = "Tự động nhặt trứng (Auto Farm Egg)",
+    CurrentValue = false,
+    Flag = "AutoEggFlag",
+    Callback = function(Value)
+        autoEggRunning = Value
+        task.spawn(function()
+            while autoEggRunning do
+                task.wait(0.5)
+                pcall(function()
+                    for _, obj in pairs(workspace:GetDescendants()) do
+                        if obj.Name:lower():find("egg") and obj:IsA("BasePart") then
+                            local player = game.Players.LocalPlayer
+                            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                                -- Logic nhặt trứng
+                            end
+                        end
+                    end
+                end)
+            end
+        end)
+    end,
+})
+
+local PlayerTab = Window:CreateTab("Người Chơi", 4483362458)
+PlayerTab:CreateSection("Chỉ Số Nhân Vật")
+
+PlayerTab:CreateSlider({
+    Name = "Tốc độ chạy (WalkSpeed)",
+    Range = {16, 300},
+    Increment = 1,
+    Suffix = "Speed",
+    CurrentValue = 16,
+    Flag = "WalkSpeedSlider",
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.WalkSpeed = Value
+        end
+    end,
+})
+
+PlayerTab:CreateSlider({
+    Name = "Sức nhảy (JumpPower)",
+    Range = {50, 500},
+    Increment = 5,
+    Suffix = "Jump",
+    CurrentValue = 50,
+    Flag = "JumpPowerSlider",
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.JumpPower = Value
+        end
+    end,
+})
+
+Rayfield:LoadConfiguration()
